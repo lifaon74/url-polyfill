@@ -1,0 +1,35 @@
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+node_modules
+.npmrc
+
+# Users Environment Variables
+.lock-wscript
+.tsdrc
+.typingsrc
+
+#IDE configuration files
+.idea
+.vscode
+*.iml
+
+dist
+
+
+# OS X trash files
+.DS_Store
+
+#eclipse ide
+.project
+.settings
+.classpath
+/node/
+/target/
+

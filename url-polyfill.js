@@ -45,15 +45,17 @@
       Object.defineProperty(this, '_entries', { value: {} });
 
       if(typeof searchString === 'string') {
-        searchString = searchString.replace(/^\?/, '');
-        var attributes = searchString.split('&');
-        var attribute;
-        for(var i = 0; i < attributes.length; i++) {
-          attribute = attributes[i].split('=');
-          this.append(
-            decodeURIComponent(attribute[0]),
-            (attribute.length > 1) ? decodeURIComponent(attribute[1]) : ''
-          );
+        if(searchString !== '') {
+          searchString = searchString.replace(/^\?/, '');
+          var attributes = searchString.split('&');
+          var attribute;
+          for(var i = 0; i < attributes.length; i++) {
+            attribute = attributes[i].split('=');
+            this.append(
+              decodeURIComponent(attribute[0]),
+              (attribute.length > 1) ? decodeURIComponent(attribute[1]) : ''
+            );
+          }
         }
       } else if(searchString instanceof URLSearchParams) {
         var _this = this;

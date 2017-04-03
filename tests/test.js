@@ -26,6 +26,7 @@ class Tester {
   static get FIREFOX () { return 'firefox' };
   static get OPERA () { return 'opera' };
   static get IE () { return 'ie' };
+  static get EDGE () { return 'edge' };
 
 
   constructor(remoteUrl) {
@@ -64,6 +65,9 @@ class Tester {
         break;
       case Tester.OPERA:
         capabilities = webdriver.Capabilities.opera();
+        break;
+      case Tester.EDGE:
+        capabilities = webdriver.Capabilities.edge();
         break;
       default:
         throw new Error('Can\'t find browswer name ' + browserName);
@@ -135,9 +139,10 @@ test.describe('URL polyfill', function() {
   this.timeout(30000);
 
   tester.testWith([
+    Tester.EDGE,
     Tester.CHROME,
-    //Tester.FIREFOX,
-    //Tester.OPERA,
+    // Tester.FIREFOX,
+    // Tester.OPERA,
     Tester.IE
   ], (driver, done) => {
     driver.manage().timeouts().setScriptTimeout(15000);

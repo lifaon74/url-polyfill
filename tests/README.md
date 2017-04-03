@@ -5,6 +5,7 @@ npm run serve
 ```
 
 Open : http://localhost:8080/tests/index.html
+
 Replace params in `config.json`.
 
 ```

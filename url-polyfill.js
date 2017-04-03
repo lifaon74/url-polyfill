@@ -163,7 +163,7 @@
     try {
       var u = new URL('b', 'http://a');
       u.pathname = 'c%20d';
-      return (u.href === 'http://a/c%20d');
+      return (u.href === 'http://a/c%20d') && u.searchParams;
     } catch(e) {
       return false;
     }

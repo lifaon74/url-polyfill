@@ -238,7 +238,7 @@
 
       'origin': {
         get: function() {
-          return this._anchorElement.protocol + '//' + this._anchorElement.hostname;
+          return this._anchorElement.protocol + '//' + this._anchorElement.hostname + (this._anchorElement.port ? (':' + this._anchorElement.port) : '');
         },
         enumerable: true
       },
@@ -295,16 +295,18 @@
   }
 
   if(!('origin' in window.location)) {
+    var getOrigin = function() {
+      return window.location.protocol + '//' + window.location.hostname + (window.location.port ? (':' + window.location.port) : '');
+    };
+
     try {
       Object.defineProperty(window.location, 'origin', {
-        get: function() {
-          return window.location.protocol + '//' + window.location.hostname;
-        },
+        get: getOrigin,
         enumerable: true
       });
     } catch(e) {
       setInterval(function() {
-        window.location.origin = window.location.protocol + '//' + window.location.hostname;
+        window.location.origin = getOrigin();
       }, 100);
     }
   }

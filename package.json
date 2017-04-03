@@ -1,10 +1,12 @@
 {
   "name": "url-polyfill",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Polyfill URL and URLSearchParams",
   "main": "url-polyfill.js",
   "scripts": {
-    "start": "uglifyjs url-polyfill.js --stats -m -o url-polyfill.min.js"
+    "start": "uglifyjs url-polyfill.js --stats -m -o url-polyfill.min.js",
+    "test": "mocha ./tests/test.js",
+    "serve": "http-server  ./"
   },
   "repository": {
     "type": "git",
@@ -13,6 +15,9 @@
   "author": "valentin",
   "license": "MIT",
   "devDependencies": {
+    "http-server": "^0.9.0",
+    "mocha": "^3.2.0",
+    "selenium-webdriver": "^3.3.0",
     "uglify-js": "^2.7.5"
   }
 }

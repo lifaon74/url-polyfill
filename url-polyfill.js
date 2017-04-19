@@ -7,7 +7,11 @@
    */
 
   var checkIfURLSearchParamsIsSupported = function() {
-    return ('URLSearchParams' in window);
+	  try {
+		  return !!new URLSearchParams();
+	  } catch(e) {
+		  return false;
+	  }
   };
 
   var checkIfIteratorIsSupported = function() {
@@ -139,11 +143,11 @@
       return searchString;
     };
 
-    window.URLSearchParams = URLSearchParams;
+    return URLSearchParams;
   };
 
   if(!checkIfURLSearchParamsIsSupported()) {
-    polyfillURLSearchParams();
+    URLSearchParams = polyfillURLSearchParams();
   }
 
   // console.log(new URLSearchParams('a=b&c=d'));
@@ -171,7 +175,7 @@
 
 
   var polyfillURL = function() {
-    var _URL = window.URL;
+    var _URL = URL;
 
     var URL = function(url, base) {
       if(typeof url !== 'string') throw new TypeError('Failed to construct \'URL\': Invalid URL');
@@ -286,27 +290,27 @@
       return _URL.revokeObjectURL.apply(_URL, arguments);
     };
 
-    window.URL = URL;
+    return URL;
 
   };
 
   if(!checkIfURLIsSupported()) {
-    polyfillURL();
+    URL = polyfillURL();
   }
 
-  if(!('origin' in window.location)) {
+  if(typeof location === "object" && !('origin' in location)) {
     var getOrigin = function() {
-      return window.location.protocol + '//' + window.location.hostname + (window.location.port ? (':' + window.location.port) : '');
+      return location.protocol + '//' + location.hostname + (location.port ? (':' + location.port) : '');
     };
 
     try {
-      Object.defineProperty(window.location, 'origin', {
+      Object.defineProperty(location, 'origin', {
         get: getOrigin,
         enumerable: true
       });
     } catch(e) {
       setInterval(function() {
-        window.location.origin = getOrigin();
+        location.origin = getOrigin();
       }, 100);
     }
   }

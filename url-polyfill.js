@@ -1,18 +1,13 @@
+var g = (typeof global !== 'undefined') ? global :
+        (typeof window !== 'undefined') ? window :
+        (typeof self !== 'undefined') ? self : this;
 
-(function() {
+(function(global) {
   /**
    * Polyfill URLSearchParams
    *
    * Inspired from : https://github.com/WebReflection/url-search-params/blob/master/src/url-search-params.js
    */
-
-  var checkIfURLSearchParamsIsSupported = function() {
-	  try {
-		  return !!new URLSearchParams();
-	  } catch(e) {
-		  return false;
-	  }
-  };
 
   var checkIfIteratorIsSupported = function() {
     try {
@@ -42,7 +37,6 @@
     return iterator;
   };
 
-
   var polyfillURLSearchParams= function() {
 
     var URLSearchParams = function(searchString) {
@@ -70,7 +64,6 @@
     };
 
     var proto = URLSearchParams.prototype;
-
 
     proto.append = function(name, value) {
       if(name in this._entries) {
@@ -143,20 +136,18 @@
       return searchString;
     };
 
-    return URLSearchParams;
+    global.URLSearchParams = URLSearchParams;
   };
 
-  if(!checkIfURLSearchParamsIsSupported()) {
-    URLSearchParams = polyfillURLSearchParams();
+  if(!('URLSearchParams' in global)) {
+    polyfillURLSearchParams();
   }
-
-  // console.log(new URLSearchParams('a=b&c=d'));
 
   // HTMLAnchorElement
 
-})();
+})(g);
 
-(function() {
+(function(global) {
   /**
    * Polyfill URL
    *
@@ -175,7 +166,7 @@
 
 
   var polyfillURL = function() {
-    var _URL = URL;
+    var _URL = global.URL;
 
     var URL = function(url, base) {
       if(typeof url !== 'string') throw new TypeError('Failed to construct \'URL\': Invalid URL');
@@ -290,32 +281,29 @@
       return _URL.revokeObjectURL.apply(_URL, arguments);
     };
 
-    return URL;
+    global.URL = URL;
 
   };
 
   if(!checkIfURLIsSupported()) {
-    URL = polyfillURL();
+    polyfillURL();
   }
 
-  if(typeof location === "object" && !('origin' in location)) {
+  if((global.location !== void 0) && !('origin' in global.location)) {
     var getOrigin = function() {
-      return location.protocol + '//' + location.hostname + (location.port ? (':' + location.port) : '');
+      return global.location.protocol + '//' + global.location.hostname + (global.location.port ? (':' + global.location.port) : '');
     };
 
     try {
-      Object.defineProperty(location, 'origin', {
+      Object.defineProperty(global.location, 'origin', {
         get: getOrigin,
         enumerable: true
       });
     } catch(e) {
       setInterval(function() {
-        location.origin = getOrigin();
+        global.location.origin = getOrigin();
       }, 100);
     }
   }
 
-
-  // console.log(new URL('https://www.yahoo.com/?fr=yset_ie_syc_oracle&type=orcl_hpset'));
-
-})();
+})(g);

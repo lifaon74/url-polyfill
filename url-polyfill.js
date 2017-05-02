@@ -172,6 +172,7 @@ var g = (typeof global !== 'undefined') ? global :
       if(typeof url !== 'string') throw new TypeError('Failed to construct \'URL\': Invalid URL');
 
       var doc = document.implementation.createHTMLDocument('');
+      window.doc = doc;
       if(base) {
         var baseElement = doc.createElement('base');
         baseElement.href = base;
@@ -181,6 +182,7 @@ var g = (typeof global !== 'undefined') ? global :
       var anchorElement = doc.createElement('a');
       anchorElement.href = url;
       doc.body.appendChild(anchorElement);
+      anchorElement.href = anchorElement.href; // force href to refresh
 
       if(anchorElement.protocol === ':' || !/:/.test(anchorElement.href)) {
         throw new TypeError('Invalid URL');

@@ -99,7 +99,14 @@ class Tester {
       __done({ success : true, data: data });
      };
      var reject = function(error) {
-      __done({ success : false, error: error });
+      __done({
+        success : false,
+        error: {
+          name: error.name,
+          message: (error.message || error.description),
+          stack: error.stack
+        }
+      });
      };
      
      try {
@@ -111,7 +118,7 @@ class Tester {
       if(data.success) {
         return data.data;
       } else {
-        throw new Error(data.error.description + '\n\n' + data.error.stack);
+        throw new Error(data.error.name + ' : ' + data.error.message + '\n' + data.error.stack + '\n\n');
       }
     });
   }
@@ -154,10 +161,20 @@ test.describe('URL polyfill', function() {
       return tester.sleep(2000);
     });
 
+    // test.it('Load', () => {
+    //   return tester.executeAsyncScript(driver, `
+    //     if(document.body) {
+    //       resolve();
+    //     } else {
+    //       window.addEventListener('load', resolve, false);
+    //     }
+    //   `);
+    // });
+
     test.it('Test URL', () => {
       return tester.executeScript(driver, `
         var url = new URL('https://www.yahoo.com:80/?fr=yset_ie_syc_oracle&type=orcl_hpset#page0');
-        
+
         if(url.hash !== '#page0') throw new Error('Invalid hash : ' + url.hash);
         if(url.host !== 'www.yahoo.com:80') throw new Error('Invalid host : ' + url.host);
         if(url.hostname !== 'www.yahoo.com') throw new Error('Invalid hostname : ' + url.hostname);
@@ -167,13 +184,13 @@ test.describe('URL polyfill', function() {
         if(url.port !== '80') throw new Error('Invalid port : ' + url.port);
         if(url.protocol !== 'https:') throw new Error('Invalid protocol : ' + url.protocol);
         if(url.search !== '?fr=yset_ie_syc_oracle&type=orcl_hpset') throw new Error('Invalid search : ' + url.search);
-        
+
         url.searchParams.append('page', 1);
         if(url.search !== '?fr=yset_ie_syc_oracle&type=orcl_hpset&page=1') throw new Error('Invalid search (append page 1) : ' + url.search);
-        
+
         url.searchParams.delete('type')
         if(url.search !== '?fr=yset_ie_syc_oracle&page=1') throw new Error('Invalid search (delete type) : ' + url.search);
-        
+
         return url;
       `)/*.then((data) => {
         console.log(data);
@@ -192,6 +209,14 @@ test.describe('URL polyfill', function() {
         if(url.search !== '') throw new Error('Invalid search : ' + url.search);
         
         return url;
+      `);
+    });
+
+    test.it('Ensure url.href does\'nt finish with ? if url.search is empty', () => {
+      return tester.executeScript(driver, `
+        var url = new URL('https://www.example.com/');
+        url.searchParams.delete('foo');
+        if(url.toString() !== 'https://www.example.com/') throw new Error('Invalid url : ' + url.toString());
       `);
     });
 

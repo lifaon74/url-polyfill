@@ -207,7 +207,7 @@ var g = (typeof global !== 'undefined') ? global :
       });
     };
 
-    ['hash', 'host', 'hostname', 'href', 'port', 'protocol', 'search']
+    ['hash', 'host', 'hostname', 'port', 'protocol', 'search']
     .forEach(function(attributeName) {
       linkURLWithAnchorAttribute(attributeName);
     });
@@ -221,6 +221,16 @@ var g = (typeof global !== 'undefined') ? global :
             return _this.href;
           };
         }
+      },
+
+      'href' : {
+        get: function() {
+          return this._anchorElement.href.replace(/\?$/,'');
+        },
+        set: function(value) {
+          this._anchorElement.href = value;
+        },
+        enumerable: true
       },
 
       'pathname' : {

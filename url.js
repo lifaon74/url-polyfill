@@ -100,6 +100,15 @@ var URLSearchParams = (function () {
         this.forEach(function (value, name) { items.push([value, name]); });
         return createIterator(items);
     };
+    URLSearchParams.prototype.toString = function () {
+        var searchString = '';
+        this.forEach(function (value, name) {
+            if (searchString.length > 0)
+                searchString += '&';
+            searchString += encodeURIComponent(name) + '=' + encodeURIComponent(value);
+        });
+        return searchString;
+    };
     return URLSearchParams;
 }());
 exports.URLSearchParams = URLSearchParams;

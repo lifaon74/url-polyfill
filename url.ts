@@ -114,14 +114,23 @@ export class URLSearchParams {
 
   values() {
     const items = [];
-    this.forEach(function(value) { items.push(value); });
+    this.forEach((value: string) => { items.push(value); });
     return createIterator(items);
   }
 
   entries() {
     const items = [];
-    this.forEach(function(value, name) { items.push([value, name]); });
+    this.forEach((value: string, name: string) => { items.push([value, name]); });
     return createIterator(items);
+  }
+
+  toString(): string {
+    let searchString: string = '';
+    this.forEach((value: string, name: string) => {
+      if(searchString.length > 0) searchString+= '&';
+      searchString += encodeURIComponent(name) + '=' + encodeURIComponent(value);
+    });
+    return searchString;
   }
 }
 

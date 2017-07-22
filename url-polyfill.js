@@ -119,7 +119,7 @@ var g = (typeof global !== 'undefined') ? global :
 
     proto.entries = function() {
       var items = [];
-      this.forEach(function(value, name) { items.push([value, name]); });
+      this.forEach(function(value, name) { items.push([name, value]); });
       return createIterator(items);
     };
 

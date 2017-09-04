@@ -327,19 +327,19 @@ var URL = (function () {
     URL.prototype.toString = function () {
         return this.href;
     };
+    // createObjectURL(object: any, options?: ObjectURLOptions): string;
+    // revokeObjectURL(url: string): void;
+    URL.patterns = {
+        protocol: '(?:([^:/?#]+):)',
+        authority: '(?://([^/?#]*))',
+        path: '([^?#]*)',
+        query: '(\\?[^#]*)',
+        hash: '(#.*)',
+        authentication: '(?:([^:]*)(?::([^@]*))?@)',
+        hostname: '([^:]+)',
+        port: '(?::(\\d+))',
+    };
     return URL;
 }());
-// createObjectURL(object: any, options?: ObjectURLOptions): string;
-// revokeObjectURL(url: string): void;
-URL.patterns = {
-    protocol: '(?:([^:/?#]+):)',
-    authority: '(?://([^/?#]*))',
-    path: '([^?#]*)',
-    query: '(\\?[^#]*)',
-    hash: '(#.*)',
-    authentication: '(?:([^:]*)(?::([^@]*))?@)',
-    hostname: '([^:]+)',
-    port: '(?::(\\d+))',
-};
 exports.URL = URL;
 URL.init();

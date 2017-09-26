@@ -1,4 +1,6 @@
-### Polyfill URL and URLSearchParams to match last ES7 specifications
+### Polyfill URL and URLSearchParams to match last WHATWG specifications
+
+Compliant in most of the use cases but not at 100% (like unicode chars, punycodes, etc...)
 
 Tested on IE 10+
 

@@ -29,7 +29,7 @@ else {
         };
     };
 }
-var URLSearchParams = (function () {
+var URLSearchParams = /** @class */ (function () {
     function URLSearchParams(init) {
         var _this = this;
         this._entries = {};
@@ -112,7 +112,7 @@ var URLSearchParams = (function () {
     return URLSearchParams;
 }());
 exports.URLSearchParams = URLSearchParams;
-var URL = (function () {
+var URL = /** @class */ (function () {
     function URL(url, base) {
         var baseParts;
         try {

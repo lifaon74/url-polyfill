@@ -170,7 +170,7 @@ var g = (typeof global !== 'undefined') ? global
     var _URL = global.URL;
 
     var URL = function(url, base) {
-      if(typeof url !== 'string') throw new TypeError('Failed to construct \'URL\': Invalid URL');
+      if(typeof url !== 'string') url = String(url);
 
       var doc = document.implementation.createHTMLDocument('');
       window.doc = doc;

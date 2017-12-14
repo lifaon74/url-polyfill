@@ -140,7 +140,7 @@ var g = (typeof global !== 'undefined') ? global
     global.URLSearchParams = URLSearchParams;
   };
 
-  if(!('URLSearchParams' in global && new URLSearchParams('?a=1').toString() === 'a=1')) {
+  if(!('URLSearchParams' in global) || (new URLSearchParams('?a=1').toString() !== 'a=1')) {
     polyfillURLSearchParams();
   }
 

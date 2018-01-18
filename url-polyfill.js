@@ -1,8 +1,3 @@
-var g = (typeof global !== 'undefined') ? global
-        : ((typeof window !== 'undefined') ? window
-        : ((typeof self !== 'undefined') ? self : this));
-
-
 (function(global) {
   /**
    * Polyfill URLSearchParams
@@ -146,7 +141,11 @@ var g = (typeof global !== 'undefined') ? global
 
   // HTMLAnchorElement
 
-})(g);
+})(
+  (typeof global !== 'undefined') ? global
+    : ((typeof window !== 'undefined') ? window
+    : ((typeof self !== 'undefined') ? self : this))
+);
 
 (function(global) {
   /**
@@ -319,4 +318,8 @@ var g = (typeof global !== 'undefined') ? global
     }
   }
 
-})(g);
+})(
+  (typeof global !== 'undefined') ? global
+    : ((typeof window !== 'undefined') ? window
+    : ((typeof self !== 'undefined') ? self : this))
+);

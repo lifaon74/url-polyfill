@@ -29,6 +29,16 @@ else {
         };
     };
 }
+/**
+ * Encodes a path segment.
+ * RFC 3986 reserves !, ', (, ), and * as well, but we only escape space,
+ * like the implementations we are polyfilling.
+ */
+function encodePathSegment(segment) {
+  return segment.replace(/ /g, function (c) {
+    return '%' + c.charCodeAt(0).toString(16)
+  });
+}
 var URLSearchParams = /** @class */ (function () {
     function URLSearchParams(init) {
         var _this = this;
@@ -240,10 +250,16 @@ var URL = /** @class */ (function () {
             return this._parts.path ? this._parts.path : '/';
         },
         set: function (value) {
-            value = value.toString();
-            if ((value.length === 0) || (value.charAt(0) !== '/'))
-                value = '/' + value;
-            this._parts.path = encodeURIComponent(value);
+            value = value.toString().split('/');
+            for (var i = 0; i < value.length; i++) {
+              value[i] = encodePathSegment(value[i])
+            }
+            if (value[0]) {
+              // ensure joined string starts with slash.
+              value.unshift('')
+            }
+            value = value.join('/');
+            this._parts.path = value;
         },
         enumerable: true,
         configurable: true

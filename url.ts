@@ -33,6 +33,17 @@ if(Symbol && Symbol.iterator && (typeof ([][Symbol.iterator]) === 'function')) {
   }
 }
 
+/**
+ * Encodes a path segment.
+ * RFC 3986 reserves !, ', (, ), and * and the implementation pipes the
+ * output of encodeURIComponent to a hex encoding pass for these special
+ * characters.
+ */
+function encodePathSegment(segment) {
+  return encodeURIComponent(segment).replace(/[!'()*]/g, function (c) {
+    return '%' + c.charCodeAt(0).toString(16)
+  });
+}
 
 
 export class URLSearchParams {
@@ -288,9 +299,12 @@ export class URL {
   }
 
   set pathname(value: string) {
-    value = value.toString();
-    if((value.length === 0) || (value.charAt(0) !== '/')) value = '/' + value;
-    this._parts.path = encodeURIComponent(value);
+    let chunks = value.toString().split('/').map(encodePathSegment);
+    if (chunks[0]) {
+      // ensure joined string starts with slash.
+      chunks.unshift('');
+    }
+    this._parts.path = chunks.join('/');
   }
 
 

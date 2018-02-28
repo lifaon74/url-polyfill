@@ -212,6 +212,16 @@ test.describe('URL polyfill', function() {
       `);
     });
 
+    test.it('Test pathname variations', () => {
+      return tester.executeScript(driver, `
+        var url = new URL('test/long/path.html', 'http://www.example.com');
+        if(url.pathname !== '/test/long/path.html') throw new Error('Invalid pathname : ' + url.pathname);
+        url.pathname = 'a/b 1'
+        if(url.pathname !== '/a/b%201') throw new Error('Invalid pathname : ' + url.pathname);
+        return url;
+      `);
+    });
+
     test.it('Ensure url.href does\'nt finish with ? if url.search is empty', () => {
       return tester.executeScript(driver, `
         var url = new URL('https://www.example.com/');

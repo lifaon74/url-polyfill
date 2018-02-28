@@ -142,10 +142,17 @@ var URL = /** @class */ (function () {
                 password: baseParts.password,
                 hostname: baseParts.hostname,
                 port: baseParts.port,
-                path: urlParts.path || baseParts.path,
                 query: urlParts.query || baseParts.query,
                 hash: urlParts.hash,
             };
+        }
+        if (!urlParts.path) {
+          this.pathname = baseParts.path;
+        } else if (urlParts.path[0] !== '/') {
+          // relative path
+          this.pathname = baseParts.path + '/' + urlParts.path;
+        } else {
+          this.pathname = urlParts.path
         }
         // console.log(URL.parse(base), URL.parse(url), this._parts);
     }

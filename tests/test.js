@@ -199,15 +199,25 @@ test.describe('URL polyfill', function() {
 
     test.it('Test URL with base', () => {
       return tester.executeScript(driver, `
-        var url = new URL('test', 'http://www.example.com');
+        var url = new URL('test', 'http://www.example.com/base');
         
         if(url.host !== 'www.example.com') throw new Error('Invalid host : ' + url.host);
         if(url.hostname !== 'www.example.com') throw new Error('Invalid hostname : ' + url.hostname);
         if(url.href !== 'http://www.example.com/test') throw new Error('Invalid href : ' + url.href);
-        if(url.pathname !== '/test') throw new Error('Invalid pathname : ' + url.pathname);
+        if(url.pathname !== '/base/test') throw new Error('Invalid pathname : ' + url.pathname);
         if(url.protocol !== 'http:') throw new Error('Invalid protocol : ' + url.protocol);
         if(url.search !== '') throw new Error('Invalid search : ' + url.search);
         
+        return url;
+      `);
+    });
+
+    test.it('Test pathname variations', () => {
+      return tester.executeScript(driver, `
+        var url = new URL('test/long/path.html', 'http://www.example.com');
+        if(url.pathname !== '/test/long/path.html') throw new Error('Invalid pathname : ' + url.pathname);
+        url.pathname = 'a/b 1'
+        if(url.pathname !== '/a/b%201') throw new Error('Invalid pathname : ' + url.pathname);
         return url;
       `);
     });

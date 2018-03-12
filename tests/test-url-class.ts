@@ -1,6 +1,6 @@
 const originalURL = window.URL;
 
-import { URL, URLSearchParams } from '../url';
+import { URL, URLSearchParams } from '../do-not-use/url';
 
 const test = () => {
   let a = new originalURL('?fr=yset_ie_syc_oracle&type=orcl_hpset#page0', 'https://username:password@www.yahoo.com:80/path');

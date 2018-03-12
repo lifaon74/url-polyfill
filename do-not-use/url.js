@@ -31,13 +31,14 @@ else {
 }
 /**
  * Encodes a path segment.
- * RFC 3986 reserves !, ', (, ), and * as well, but we only escape space,
- * like the implementations we are polyfilling.
+ * RFC 3986 reserves !, ', (, ), and * and the implementation pipes the
+ * output of encodeURIComponent to a hex encoding pass for these special
+ * characters.
  */
 function encodePathSegment(segment) {
-  return segment.replace(/ /g, function (c) {
-    return '%' + c.charCodeAt(0).toString(16)
-  });
+    return encodeURIComponent(segment).replace(/[!'()*]/g, function (c) {
+        return '%' + c.charCodeAt(0).toString(16);
+    });
 }
 var URLSearchParams = /** @class */ (function () {
     function URLSearchParams(init) {
@@ -142,17 +143,10 @@ var URL = /** @class */ (function () {
                 password: baseParts.password,
                 hostname: baseParts.hostname,
                 port: baseParts.port,
+                path: urlParts.path || baseParts.path,
                 query: urlParts.query || baseParts.query,
                 hash: urlParts.hash,
             };
-        }
-        if (!urlParts.path) {
-          this.pathname = baseParts.path;
-        } else if (urlParts.path[0] !== '/') {
-          // relative path
-          this.pathname = baseParts.path + '/' + urlParts.path;
-        } else {
-          this.pathname = urlParts.path
         }
         // console.log(URL.parse(base), URL.parse(url), this._parts);
     }
@@ -257,16 +251,12 @@ var URL = /** @class */ (function () {
             return this._parts.path ? this._parts.path : '/';
         },
         set: function (value) {
-            value = value.toString().split('/');
-            for (var i = 0; i < value.length; i++) {
-              value[i] = encodePathSegment(value[i])
+            var chunks = value.toString().split('/').map(encodePathSegment);
+            if (chunks[0]) {
+                // ensure joined string starts with slash.
+                chunks.unshift('');
             }
-            if (value[0]) {
-              // ensure joined string starts with slash.
-              value.unshift('')
-            }
-            value = value.join('/');
-            this._parts.path = value;
+            this._parts.path = chunks.join('/');
         },
         enumerable: true,
         configurable: true

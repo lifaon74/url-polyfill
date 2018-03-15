@@ -33,6 +33,18 @@
     return iterator;
   };
 
+  /**
+   * Search param name and values should be encoded according to https://url.spec.whatwg.org/#urlencoded-serializing
+   * encodeURIComponent() produces the same result except encoding spaces as `%20` instead of `+`.
+   */
+  var serializeParam = function(value) {
+    return encodeURIComponent(value).replace(/%20/g, '+');
+  };
+
+  var deserializeParam = function(value) {
+    return decodeURIComponent(value).replace(/\+/g, ' ');
+  };
+
   var polyfillURLSearchParams= function() {
 
     var URLSearchParams = function(searchString) {
@@ -46,8 +58,8 @@
           for(var i = 0; i < attributes.length; i++) {
             attribute = attributes[i].split('=');
             this.append(
-              decodeURIComponent(attribute[0]),
-              (attribute.length > 1) ? decodeURIComponent(attribute[1]) : ''
+              deserializeParam(attribute[0]),
+              (attribute.length > 1) ? deserializeParam(attribute[1]) : ''
             );
           }
         }
@@ -127,7 +139,7 @@
       var searchString = '';
       this.forEach(function(value, name) {
         if(searchString.length > 0) searchString+= '&';
-        searchString += encodeURIComponent(name) + '=' + encodeURIComponent(value);
+        searchString += serializeParam(name) + '=' + serializeParam(value);
       });
       return searchString;
     };

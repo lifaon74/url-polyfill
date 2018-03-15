@@ -230,6 +230,18 @@ test.describe('URL polyfill', function() {
       `);
     });
 
+    test.it('URL SearchParams should have spaces encoded as "+"', () => {
+      return tester.executeScript(driver, `
+        var url = new URL('https://www.example.com/');
+        url.searchParams.set('foo', 'value with spaces');
+        if(url.toString() !== 'https://www.example.com/?foo=value+with+spaces') throw new Error('Invalid url : ' + url.toString());
+
+        var url = new URL('https://www.example.com/?foo=another+value+with+spaces');
+        var fooParam = url.searchParams.get('foo');
+        if(fooParam !== 'another value with spaces') throw new Error('Invalid "foo" param value : ' + fooParam);
+      `);
+    });
+
 
     test.after(() => {
       driver.quit();

@@ -257,12 +257,12 @@
 
       'origin': {
         get: function() {
-          var ignorePorts = [80, 443, 21]; // Ignore ports for http, https and ftp
+          var ignorePortsFor = ['http', 'https', 'ftp']; // Ignore ports for http, https and ftp
           return this._anchorElement.protocol +
             '//' +
             this._anchorElement.hostname +
             (
-              this._anchorElement.port && ignorePorts.indexOf(this._anchorElement.port) < 0 ?
+              this._anchorElement.port && ignorePortsFor.indexOf(this._anchorElement.protocol) < 0 ?
                 (':' + this._anchorElement.port) :
                 ''
             );

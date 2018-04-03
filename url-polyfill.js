@@ -257,7 +257,15 @@
 
       'origin': {
         get: function() {
-          return this._anchorElement.protocol + '//' + this._anchorElement.hostname + (this._anchorElement.port ? (':' + this._anchorElement.port) : '');
+          var ignorePorts = [80, 443, 21]; // Ignore ports for http, https and ftp
+          return this._anchorElement.protocol +
+            '//' +
+            this._anchorElement.hostname +
+            (
+              this._anchorElement.port && ignorePorts.indexOf(this._anchorElement.port) < 0 ?
+                (':' + this._anchorElement.port) :
+                ''
+            );
         },
         enumerable: true
       },

@@ -1,35 +1,33 @@
-(function (factory) {
-    if (typeof module === "object" && typeof module.exports === "object") {
-        var v = factory(require, exports);
-        if (v !== undefined) module.exports = v;
-    }
-    else if (typeof define === "function" && define.amd) {
-        define(["require", "exports", "./classes/Driver", "./classes/Async", "./classes/Tester"], factory);
-    }
-})(function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    const Driver_1 = require("./classes/Driver");
-    const Async_1 = require("./classes/Async");
-    const Tester_1 = require("./classes/Tester");
-    (function example() {
-        const config = require('./config.json');
-        const tester = new Tester_1.Tester(config.testServer);
-        return tester.runForMany([
-            Driver_1.Driver.EDGE,
-            Driver_1.Driver.CHROME,
-            // Driver.FIREFOX,
-            // Driver.OPERA,
-            Driver_1.Driver.IE
-        ], async (driver) => {
-            await driver.driver.manage().setTimeouts({
-                pageLoad: 300000,
-                script: 300000,
-            });
-            await driver.navigate(config.testHost);
-            await Async_1.Async.$delay(500);
-            await tester.test('Test URL', () => {
-                return driver.executeScript(`
+import * as $webdriver from 'selenium-webdriver';
+
+import { Driver } from './classes/Driver';
+import { Async } from './classes/Async';
+import { Tester } from './classes/Tester';
+
+
+(function example() {
+  const config = require('./config.json');
+  const tester = new Tester(config.testServer);
+
+  return tester.runForMany([
+    Driver.EDGE,
+    Driver.CHROME,
+    // Driver.FIREFOX,
+    // Driver.OPERA,
+    Driver.IE
+  ], async (driver: Driver) => {
+
+
+    await driver.driver.manage().setTimeouts({
+      pageLoad: 300000,
+      script: 300000,
+    });
+    await driver.navigate(config.testHost);
+
+    await Async.$delay(500);
+
+    await tester.test('Test URL', () =>  {
+      return driver.executeScript(`
         var url = new URL('https://www.yahoo.com:80/?fr=yset_ie_syc_oracle&type=orcl_hpset#page0');
 
         if(url.hash !== '#page0') throw new Error('Invalid hash : ' + url.hash);
@@ -50,9 +48,10 @@
 
         return url;
       `);
-            });
-            await tester.test('Test URL with base', () => {
-                return driver.executeScript(`
+    });
+
+    await tester.test('Test URL with base', () => {
+      return driver.executeScript(`
         var url = new URL('test', 'http://www.example.com/base');
         
         if(url.host !== 'www.example.com') throw new Error('Invalid host : ' + url.host);
@@ -64,25 +63,28 @@
         
         return url;
       `);
-            });
-            await tester.test('Test pathname variations', () => {
-                return driver.executeScript(`
+    });
+
+    await tester.test('Test pathname variations', () => {
+      return driver.executeScript(`
         var url = new URL('test/long/path.html', 'http://www.example.com');
         if(url.pathname !== '/test/long/path.html') throw new Error('Invalid pathname : ' + url.pathname);
         url.pathname = 'a/b 1'
         if(url.pathname !== '/a/b%201') throw new Error('Invalid pathname : ' + url.pathname);
         return url;
       `);
-            });
-            await tester.test('Ensure url.href does\'nt finish with ? if url.search is empty', () => {
-                return driver.executeScript(`
+    });
+
+    await tester.test('Ensure url.href does\'nt finish with ? if url.search is empty', () => {
+      return driver.executeScript(`
         var url = new URL('https://www.example.com/');
         url.searchParams.delete('foo');
         if(url.toString() !== 'https://www.example.com/') throw new Error('Invalid url : ' + url.toString());
       `);
-            });
-            await tester.test('URL SearchParams should have spaces encoded as "+"', () => {
-                return driver.executeScript(`
+    });
+
+    await tester.test('URL SearchParams should have spaces encoded as "+"', () => {
+      return driver.executeScript(`
         var url = new URL('https://www.example.com/');
         url.searchParams.set('foo', 'value with spaces');
         if(url.toString() !== 'https://www.example.com/?foo=value+with+spaces') throw new Error('Invalid url : ' + url.toString());
@@ -91,9 +93,10 @@
         var fooParam = url.searchParams.get('foo');
         if(fooParam !== 'another value with spaces') throw new Error('Invalid "foo" param value : ' + fooParam);
       `);
-            });
-            await tester.test('Url Protocol should control the visibility of port in origin', () => {
-                return driver.executeScript(`
+    });
+
+    await tester.test('Url Protocol should control the visibility of port in origin', () => {
+      return driver.executeScript(`
         var url = new URL('https://www.example.com:443'); // No port for https on 443
         var url2 = new URL('http://www.example.com:8080'); // Port for http on 8080
         var url3 = new URL('https://www.example.com:80'); // port for https on 80
@@ -102,7 +105,8 @@
         if (url2.origin !== 'http://www.example.com:8080') throw new Error('Origin value is not correct ' + url2.origin);
         if (url3.origin !== 'https://www.example.com:80') throw new Error('Origin value is not correct ' + url3.origin);
       `);
-            });
-        });
-    })();
-});
+    });
+
+  });
+
+})();

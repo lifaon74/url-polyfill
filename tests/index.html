@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Tests</title>
+
   <script type="text/javascript">
-    var script = document.createElement('script');
-    script.src = '../url-polyfill.js?timeout=' + Math.random().toString();
-    document.head.appendChild(script);
+    ['url-polyfill'].forEach(function(fileName) {
+      var script = document.createElement('script');
+      script.src = '../' + fileName + '.js?timeout=' + Math.random().toString();
+      document.head.appendChild(script);
+    });
   </script>
 
 </head>

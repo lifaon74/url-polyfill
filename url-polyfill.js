@@ -257,7 +257,18 @@
 
       'origin': {
         get: function() {
-          return this._anchorElement.protocol + '//' + this._anchorElement.hostname + (this._anchorElement.port ? (':' + this._anchorElement.port) : '');
+          // get expected port from protocol
+          var expectedPort = {'http:': 80, 'https:': 443, 'ftp:': 21}[this._anchorElement.protocol];
+          // add port to origin if, expected port is different than actual port
+          // and it is not empty f.e http://foo:8080
+          // 8080 != 80 && 8080 != ''
+          var addPortToOrigin = this._anchorElement.port != expectedPort &&
+            this._anchorElement.port !== ''
+
+          return this._anchorElement.protocol +
+            '//' +
+            this._anchorElement.hostname +
+            (addPortToOrigin ? (':' + this._anchorElement.port) : '');
         },
         enumerable: true
       },

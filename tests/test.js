@@ -204,7 +204,7 @@ test.describe('URL polyfill', function() {
         if(url.host !== 'www.example.com') throw new Error('Invalid host : ' + url.host);
         if(url.hostname !== 'www.example.com') throw new Error('Invalid hostname : ' + url.hostname);
         if(url.href !== 'http://www.example.com/test') throw new Error('Invalid href : ' + url.href);
-        if(url.pathname !== '/base/test') throw new Error('Invalid pathname : ' + url.pathname);
+        if(url.pathname !== '/test') throw new Error('Invalid pathname : ' + url.pathname);
         if(url.protocol !== 'http:') throw new Error('Invalid protocol : ' + url.protocol);
         if(url.search !== '') throw new Error('Invalid search : ' + url.search);
         
@@ -239,6 +239,18 @@ test.describe('URL polyfill', function() {
         var url = new URL('https://www.example.com/?foo=another+value+with+spaces');
         var fooParam = url.searchParams.get('foo');
         if(fooParam !== 'another value with spaces') throw new Error('Invalid "foo" param value : ' + fooParam);
+      `);
+    });
+
+    test.it('Url Protocol should control the visibility of port in origin', () => {
+      return tester.executeScript(driver, `
+        var url = new URL('https://www.example.com:443'); // No port for https on 443
+        var url2 = new URL('http://www.example.com:8080'); // Port for http on 8080
+        var url3 = new URL('https://www.example.com:80'); // port for https on 80
+        
+        if (url.origin !== 'https://www.example.com') throw new Error(\`Origin value is not correct \$\{url.origin\}\`);
+        if (url2.origin !== 'http://www.example.com:8080') throw new Error(\`Origin value is not correct \$\{url2.origin\}\`);
+        if (url3.origin !== 'https://www.example.com:80') throw new Error(\`Origin value is not correct \$\{url3.origin\}\`);
       `);
     });
 

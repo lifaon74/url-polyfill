@@ -136,12 +136,11 @@
     }
 
     proto.toString = function() {
-      var searchString = '';
+      var searchArray = [];
       this.forEach(function(value, name) {
-        if(searchString.length > 0) searchString+= '&';
-        searchString += serializeParam(name) + '=' + serializeParam(value);
+        searchArray.push(serializeParam(name) + '=' + serializeParam(value));
       });
-      return searchString;
+      return searchArray.join("&");
     };
 
     global.URLSearchParams = URLSearchParams;
@@ -183,18 +182,26 @@
     var URL = function(url, base) {
       if(typeof url !== 'string') url = String(url);
 
-      var doc = document.implementation.createHTMLDocument('');
-      window.doc = doc;
-      if(base) {
-        var baseElement = doc.createElement('base');
+      // Only create another document if the base is different from current location.
+      var doc = document, baseElement;
+      if(base && (global.location === void 0 || base !== global.location.href)) {
+        doc = document.implementation.createHTMLDocument('');
+        baseElement = doc.createElement('base');
         baseElement.href = base;
         doc.head.appendChild(baseElement);
+        try {
+            if(baseElement.href.indexOf(base) !== 0) throw new Error(baseElement.href);
+        } catch (err) { 
+            throw new Error("URL unable to set base " + base + " due to " + err);
+        }
       }
 
       var anchorElement = doc.createElement('a');
       anchorElement.href = url;
-      doc.body.appendChild(anchorElement);
-      anchorElement.href = anchorElement.href; // force href to refresh
+      if (baseElement) {
+          doc.body.appendChild(anchorElement);
+          anchorElement.href = anchorElement.href; // force href to refresh
+      }
 
       if(anchorElement.protocol === ':' || !/:/.test(anchorElement.href)) {
         throw new TypeError('Invalid URL');

@@ -1,5 +1,3 @@
-import * as $webdriver from 'selenium-webdriver';
-
 import { Driver } from './classes/Driver';
 import { Async } from './classes/Async';
 import { Tester } from './classes/Tester';
@@ -16,7 +14,6 @@ import { Tester } from './classes/Tester';
     // Driver.OPERA,
     Driver.IE
   ], async (driver: Driver) => {
-
 
     await driver.driver.manage().setTimeouts({
       pageLoad: 300000,
@@ -109,4 +106,4 @@ import { Tester } from './classes/Tester';
 
   });
 
-})();
+})().catch(_ => console.log('ERROR: ', _));

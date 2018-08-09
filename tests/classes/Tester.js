@@ -26,8 +26,10 @@
                 .then(() => {
                 return driver.quit();
             }, (error) => {
-                return driver.quit()
-                    .then(() => Promise.reject(error));
+                return Promise.race([
+                    driver.quit(),
+                    new Promise((resolve) => setTimeout(resolve, 2000))
+                ]).then(() => Promise.reject(error));
             });
         }
         test(testName, callback) {

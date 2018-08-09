@@ -24,8 +24,10 @@ export class Tester {
       .then(() => {
         return driver.quit();
       }, (error: any) => {
-        return driver.quit()
-          .then(() => Promise.reject(error));
+        return Promise.race([
+          driver.quit(),
+          new Promise((resolve: any) => setTimeout(resolve, 2000))
+        ]).then(() => Promise.reject(error));
       });
   }
 

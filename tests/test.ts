@@ -40,9 +40,25 @@ import { Tester } from './classes/Tester';
         url.searchParams.append('page', 1);
         if(url.search !== '?fr=yset_ie_syc_oracle&type=orcl_hpset&page=1') throw new Error('Invalid search (append page 1) : ' + url.search);
 
-        url.searchParams.delete('type')
+        url.searchParams.delete('type');
         if(url.search !== '?fr=yset_ie_syc_oracle&page=1') throw new Error('Invalid search (delete type) : ' + url.search);
 
+        return url;
+      `);
+    });
+
+    await tester.test('Test URLSearchParams', () =>  {
+      return driver.executeScript(`
+        var url = new URL('http://localhost/?a=b');
+
+        if(url.searchParams !== url.searchParams) throw new Error('Expects url.searchParams === url.searchParams');
+        
+        url.search = 'c=b';
+        if(url.searchParams.toString() !== 'c=b') throw new Error('Expects url.searchParams.toString() === c=b');
+        
+        url.searchParams.append('d', 'e');
+        if(url.search !== '?c=b&d=e') throw new Error('Expects url.search === ?c=b&d=e');
+        
         return url;
       `);
     });

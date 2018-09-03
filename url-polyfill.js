@@ -162,8 +162,36 @@
     global.URLSearchParams = URLSearchParams;
   };
 
-  if (!('URLSearchParams' in global) || (new URLSearchParams('?a=1').toString() !== 'a=1') || true) {
+  if (!('URLSearchParams' in global) || (new URLSearchParams('?a=1').toString() !== 'a=1')) {
     polyfillURLSearchParams();
+  }
+
+  if (typeof URLSearchParams.prototype.sort !== 'function') {
+    URLSearchParams.prototype.sort = function() {
+      var _this = this;
+      var items = [];
+      this.forEach(function(value, name) {
+        items.push([name, value]);
+        if (!_this._entries) {
+          _this.delete(name);
+        }
+      });
+      items.sort(function(a, b) {
+        if (a[0] < b[0]) {
+          return -1;
+        } else if (a[0] > b[0]) {
+          return +1;
+        } else {
+          return 0;
+        }
+      });
+      if (_this._entries) { // force reset because IE keeps keys index
+        _this._entries = {};
+      }
+      for (var i = 0; i < items.length; i++) {
+        this.append(items[i][0], items[i][1]);
+      }
+    };
   }
 
   // HTMLAnchorElement
@@ -379,7 +407,7 @@
 
   };
 
-  if (!checkIfURLIsSupported() || true) {
+  if (!checkIfURLIsSupported()) {
     polyfillURL();
   }
 

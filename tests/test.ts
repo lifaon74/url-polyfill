@@ -63,6 +63,16 @@ import { Tester } from './classes/Tester';
       `);
     });
 
+    await tester.test('Test URLSearchParams.sort', () =>  {
+      return driver.executeScript(`
+        var a = new URLSearchParams('b=1&a=2&c=3');
+        a.sort();
+        if(a.toString() !== 'a=2&b=1&c=3') throw new Error('Expects searchParams.sort().toString() === a=2&b=1&c=3');
+      `);
+    });
+
+
+
     await tester.test('Test URL with base', () => {
       return driver.executeScript(`
         var url = new URL('test', 'http://www.example.com/base');

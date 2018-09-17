@@ -26,9 +26,9 @@ const url = new URL('https://www.example.com:8080/?fr=yset_ie_syc_oracle&type=or
 - host: `"www.example.com:8080"`
 - hostname: `"www.example.com"`
 - href: `"https://www.example.com:8080/?fr=yset_ie_syc_oracle&type=orcl_hpset#page0"`
-- origin: `"https://www.example.com"`
+- origin: `"https://www.example.com:8080"`
 - pathname: `"/"`
-- port: `""`
+- port: `"8080"`
 - protocol: `"https:"`
 - search: `"?fr=yset_ie_syc_oracle&type=orcl_hpset"`
 - searchParams: URLSearchParams (see next)

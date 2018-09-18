@@ -66,6 +66,22 @@
         return url;
       `);
             });
+            await tester.test('Test URLSearchParams constructor', () => {
+                return driver.executeScript(`
+        var a = new URLSearchParams('b=1&a=2&c=3');
+        if(a.toString() !== 'b=1&a=2&c=3') throw new Error('Invalid constructor with new URLSearchParams(\\'b=1&a=2&c=3\\')');
+        
+        var b = new URLSearchParams(a);
+        if(b.toString() !== 'b=1&a=2&c=3') throw new Error('Invalid constructor with new URLSearchParams(new URLSearchParams(\\'b=1&a=2&c=3\\'))');
+        
+        var c = new URLSearchParams([['b', 1], ['a', 2], ['c', 3]]);
+        if(c.toString() !== 'b=1&a=2&c=3') throw new Error('Invalid constructor with new URLSearchParams([[\\'b\\', 1], [\\'a\\', 2], [\\'c\\', 3]])');
+        
+        var d = new URLSearchParams({ 'b': 1, 'a': 2, 'c': 3 });
+        if(d.toString() !== 'b=1&a=2&c=3') throw new Error('Invalid constructor with new URLSearchParams({ \\'b\\': 1, \\'a\\': 2, \\'c\\': 3 })');
+        
+      `);
+            });
             await tester.test('Test URLSearchParams.sort', () => {
                 return driver.executeScript(`
         var a = new URLSearchParams('b=1&a=2&c=3');

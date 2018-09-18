@@ -59,6 +59,25 @@
         searchString.forEach(function(value, name) {
           _this.append(name, value);
         });
+      } else if ((searchString !== null) && (typeof searchString === 'object')) {
+        if (Object.prototype.toString.call(searchString) === '[object Array]') {
+          for (var i = 0; i < searchString.length; i++) {
+            var entry = searchString[i];
+            if ((Object.prototype.toString.call(entry) === '[object Array]') || (entry.length !== 2)) {
+              this.append(entry[0], entry[1]);
+            } else {
+              throw new TypeError('Expected [string, any] as entry at index ' + i + ' of URLSearchParams\'s input');
+            }
+          }
+        } else {
+          for (var key in searchString) {
+            if (searchString.hasOwnProperty(key)) {
+              this.append(key, searchString[key]);
+            }
+          }
+        }
+      } else {
+        throw new TypeError('Unsupported input\'s type for URLSearchParams');
       }
     };
 
@@ -66,9 +85,9 @@
 
     proto.append = function(name, value) {
       if (name in this._entries) {
-        this._entries[name].push(value.toString());
+        this._entries[name].push(String(value));
       } else {
-        this._entries[name] = [value.toString()];
+        this._entries[name] = [String(value)];
       }
     };
 
@@ -89,7 +108,7 @@
     };
 
     proto.set = function(name, value) {
-      this._entries[name] = [value.toString()];
+      this._entries[name] = [String(value)];
     };
 
     proto.forEach = function(callback, thisArg) {
@@ -140,24 +159,6 @@
       return searchArray.join('&');
     };
 
-    Object.defineProperty(proto, '_fromString', {
-      enumerable: false,
-      configurable: false,
-      writable: false,
-      value: function(searchString) {
-        this._entries = {};
-        searchString = searchString.replace(/^\?/, '');
-        var attributes = searchString.split('&');
-        var attribute;
-        for (var i = 0; i < attributes.length; i++) {
-          attribute = attributes[i].split('=');
-          this.append(
-            deserializeParam(attribute[0]),
-            (attribute.length > 1) ? deserializeParam(attribute[1]) : ''
-          );
-        }
-      }
-    });
 
     global.URLSearchParams = URLSearchParams;
   };
@@ -166,8 +167,10 @@
     polyfillURLSearchParams();
   }
 
-  if (typeof URLSearchParams.prototype.sort !== 'function') {
-    URLSearchParams.prototype.sort = function() {
+  var proto = URLSearchParams.prototype;
+
+  if (typeof proto.sort !== 'function') {
+    proto.sort = function() {
       var _this = this;
       var items = [];
       this.forEach(function(value, name) {
@@ -192,6 +195,35 @@
         this.append(items[i][0], items[i][1]);
       }
     };
+  }
+
+  if (typeof proto._fromString !== 'function') {
+    Object.defineProperty(proto, '_fromString', {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: function(searchString) {
+        if (this._entries) {
+          this._entries = {};
+        } else {
+          var _this = this;
+          this.searchParams.forEach(function(value, name) {
+            _this.delete(name);
+          });
+        }
+
+        searchString = searchString.replace(/^\?/, '');
+        var attributes = searchString.split('&');
+        var attribute;
+        for (var i = 0; i < attributes.length; i++) {
+          attribute = attributes[i].split('=');
+          this.append(
+            deserializeParam(attribute[0]),
+            (attribute.length > 1) ? deserializeParam(attribute[1]) : ''
+          );
+        }
+      }
+    });
   }
 
   // HTMLAnchorElement

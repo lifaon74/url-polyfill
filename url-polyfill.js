@@ -206,10 +206,13 @@
         if (this._entries) {
           this._entries = {};
         } else {
-          var _this = this;
-          this.searchParams.forEach(function(value, name) {
-            _this.delete(name);
+          var keys = [];
+          this.forEach(function(value, name) {
+            keys.push(name);
           });
+          for (var i = 0; i < keys.length; i++) {
+            this.delete(keys[i]);
+          }
         }
 
         searchString = searchString.replace(/^\?/, '');

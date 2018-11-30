@@ -49,8 +49,11 @@
 
     var URLSearchParams = function(searchString) {
       Object.defineProperty(this, '_entries', { writable: true, value: {} });
+      var typeofSearchString = typeof searchString;
 
-      if (typeof searchString === 'string') {
+      if (typeofSearchString === 'undefined') {
+        // do nothing
+      } else if (typeofSearchString === 'string') {
         if (searchString !== '') {
           this._fromString(searchString);
         }
@@ -59,7 +62,7 @@
         searchString.forEach(function(value, name) {
           _this.append(name, value);
         });
-      } else if ((searchString !== null) && (typeof searchString === 'object')) {
+      } else if ((searchString !== null) && (typeofSearchString === 'object')) {
         if (Object.prototype.toString.call(searchString) === '[object Array]') {
           for (var i = 0; i < searchString.length; i++) {
             var entry = searchString[i];

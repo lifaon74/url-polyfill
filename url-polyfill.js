@@ -42,7 +42,7 @@
   };
 
   var deserializeParam = function(value) {
-    return decodeURIComponent(value).replace(/\+/g, ' ');
+    return decodeURIComponent(String(value).replace(/\+/g, ' '));
   };
 
   var polyfillURLSearchParams = function() {

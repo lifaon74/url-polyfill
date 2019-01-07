@@ -66,6 +66,17 @@
         return url;
       `);
             });
+            await tester.test('Test URLSearchParams special char encoding/decoding', () => {
+                return driver.executeScript(`
+        if(new URLSearchParams('a=2018-12-19T09:14:35%2B09:00').get('a') !== '2018-12-19T09:14:35+09:00') {
+          throw new Error('a=2018-12-19T09:14:35%2B09:00 failed');
+        }
+        
+        if(new URLSearchParams('a=one+two').get('a') !== 'one two') {
+          throw new Error('a=one+two failed');
+        }
+      `);
+            });
             await tester.test('Test URLSearchParams constructor', () => {
                 return driver.executeScript(`
         var a = new URLSearchParams('b=1&a=2&c=3');

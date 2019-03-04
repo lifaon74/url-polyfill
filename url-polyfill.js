@@ -166,11 +166,11 @@
     global.URLSearchParams = URLSearchParams;
   };
 
-  if (!('URLSearchParams' in global) || (new URLSearchParams('?a=1').toString() !== 'a=1')) {
+  if (!('URLSearchParams' in global) || (new global.URLSearchParams('?a=1').toString() !== 'a=1')) {
     polyfillURLSearchParams();
   }
 
-  var proto = URLSearchParams.prototype;
+  var proto = global.URLSearchParams.prototype;
 
   if (typeof proto.sort !== 'function') {
     proto.sort = function() {
@@ -249,7 +249,7 @@
 
   var checkIfURLIsSupported = function() {
     try {
-      var u = new URL('b', 'http://a');
+      var u = new global.URL('b', 'http://a');
       u.pathname = 'c%20d';
       return (u.href === 'http://a/c%20d') && u.searchParams;
     } catch (e) {
@@ -295,7 +295,7 @@
 
 
       // create a linked searchParams which reflect its changes on URL
-      var searchParams = new URLSearchParams(this.search);
+      var searchParams = new global.URLSearchParams(this.search);
       var enableSearchUpdate = true;
       var enableSearchParamsUpdate = true;
       var _this = this;

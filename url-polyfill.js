@@ -166,7 +166,17 @@
     global.URLSearchParams = URLSearchParams;
   };
 
-  if (!('URLSearchParams' in global) || (new global.URLSearchParams('?a=1').toString() !== 'a=1')) {
+  var checkIfURLSearchParamsSupported = function() {
+    try {
+      var URLSearchParams = global.URLSearchParams;
+
+      return (new URLSearchParams('?a=1').toString() === 'a=1') && (typeof URLSearchParams.prototype.set === 'function');
+    } catch (e) {
+      return false;
+    }
+  };
+
+  if (!checkIfURLSearchParamsSupported()) {
     polyfillURLSearchParams();
   }
 

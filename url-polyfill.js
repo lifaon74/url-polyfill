@@ -260,7 +260,7 @@
   var checkIfURLIsSupported = function() {
     try {
       var u = new global.URL('b', 'http://a');
-      u.pathname = 'c%20d';
+      u.pathname = 'c d';
       return (u.href === 'http://a/c%20d') && u.searchParams;
     } catch (e) {
       return false;

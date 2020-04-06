@@ -295,7 +295,11 @@
         anchorElement.href = anchorElement.href; // force href to refresh
       }
 
-      if (anchorElement.protocol === ':' || !/:/.test(anchorElement.href)) {
+      var inputElement = doc.createElement('input');
+      inputElement.type = 'url';
+      inputElement.value = url;
+
+      if (anchorElement.protocol === ':' || !/:/.test(anchorElement.href) || (!inputElement.checkValidity() && !base)) {
         throw new TypeError('Invalid URL');
       }
 

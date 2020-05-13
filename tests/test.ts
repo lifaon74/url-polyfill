@@ -159,6 +159,20 @@ import { Tester } from './classes/Tester';
       `);
     });
 
+    await tester.test('URL constructor should throw on invalid URL', () => {
+      return driver.executeScript(`
+        try {
+          var url = 'relative_url_without_base';
+          new URL(url);
+          throw new Error('Should have thrown for URL(' + url + ')');
+        } catch (e) {
+          if (!e instanceof TypeError) {
+            throw new Error("Expected TypeError but got " + e);
+          }
+        }
+      `);
+    });
+
   });
 
 })().catch(_ => console.log('ERROR: ', _));

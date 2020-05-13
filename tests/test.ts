@@ -23,7 +23,7 @@ import { Tester } from './classes/Tester';
 
     await Async.$delay(500);
 
-    await tester.test('Test URL', () =>  {
+    await tester.test('Test URL', () => {
       return driver.executeScript(`
         var url = new URL('https://www.yahoo.com:80/?fr=yset_ie_syc_oracle&type=orcl_hpset#page0');
 
@@ -47,7 +47,7 @@ import { Tester } from './classes/Tester';
       `);
     });
 
-    await tester.test('Test URLSearchParams', () =>  {
+    await tester.test('Test URLSearchParams', () => {
       return driver.executeScript(`
         var url = new URL('http://localhost/?a=b');
 
@@ -63,7 +63,7 @@ import { Tester } from './classes/Tester';
       `);
     });
 
-    await tester.test('Test URLSearchParams special char encoding/decoding', () =>  {
+    await tester.test('Test URLSearchParams special char encoding/decoding', () => {
       return driver.executeScript(`
         if(new URLSearchParams('a=2018-12-19T09:14:35%2B09:00').get('a') !== '2018-12-19T09:14:35+09:00') {
           throw new Error('a=2018-12-19T09:14:35%2B09:00 failed');
@@ -75,7 +75,7 @@ import { Tester } from './classes/Tester';
       `);
     });
 
-    await tester.test('Test URLSearchParams constructor', () =>  {
+    await tester.test('Test URLSearchParams constructor', () => {
       return driver.executeScript(`
         var a = new URLSearchParams('b=1&a=2&c=3');
         if(a.toString() !== 'b=1&a=2&c=3') throw new Error('Invalid constructor with new URLSearchParams(\\'b=1&a=2&c=3\\')');
@@ -92,14 +92,13 @@ import { Tester } from './classes/Tester';
       `);
     });
 
-    await tester.test('Test URLSearchParams.sort', () =>  {
+    await tester.test('Test URLSearchParams.sort', () => {
       return driver.executeScript(`
         var a = new URLSearchParams('b=1&a=2&c=3');
         a.sort();
         if(a.toString() !== 'a=2&b=1&c=3') throw new Error('Expects searchParams.sort().toString() === a=2&b=1&c=3');
       `);
     });
-
 
 
     await tester.test('Test URL with base', () => {

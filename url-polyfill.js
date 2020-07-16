@@ -170,7 +170,11 @@
     try {
       var URLSearchParams = global.URLSearchParams;
 
-      return (new URLSearchParams('?a=1').toString() === 'a=1') && (typeof URLSearchParams.prototype.set === 'function');
+      return (
+        (new URLSearchParams('?a=1').toString() === 'a=1') &&
+        (typeof URLSearchParams.prototype.set === 'function') &&
+        (typeof URLSearchParams.prototype.entries === 'function')
+      );
     } catch (e) {
       return false;
     }

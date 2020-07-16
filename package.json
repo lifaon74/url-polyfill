@@ -4,7 +4,7 @@
   "description": "Polyfill URL and URLSearchParams",
   "main": "url-polyfill.js",
   "scripts": {
-    "start": "uglifyjs url-polyfill.js --stats -m -o url-polyfill.min.js",
+    "start": "uglifyjs url-polyfill.js -m -o url-polyfill.min.js",
     "test": "node ./tests/test.js",
     "serve": "http-server  ./ -p9876"
   },

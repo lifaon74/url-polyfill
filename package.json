@@ -1,6 +1,6 @@
 {
   "name": "url-polyfill",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "description": "Polyfill URL and URLSearchParams",
   "main": "url-polyfill.js",
   "scripts": {

@@ -165,6 +165,12 @@
         }
       `);
             });
+            await tester.test('URL constructor should not throw when using upper-cased base', () => {
+                return driver.executeScript(`
+        var url = new URL('/foo', 'https://EXAMPLE.COM');
+        if (url.href !== 'https://example.com/foo') throw new Error('The HREF text-case is not correct')
+      `);
+            });
         });
     })().catch(_ => console.log('ERROR: ', _));
 });

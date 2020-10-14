@@ -281,6 +281,7 @@
       // Only create another document if the base is different from current location.
       var doc = document, baseElement;
       if (base && (global.location === void 0 || base !== global.location.href)) {
+        base = base.toLowerCase();
         doc = document.implementation.createHTMLDocument('');
         baseElement = doc.createElement('base');
         baseElement.href = base;

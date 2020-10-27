@@ -277,7 +277,7 @@
 
     var URL = function(url, base) {
       if (typeof url !== 'string') url = String(url);
-      if (typeof base !== 'string') base = String(base);
+      if (base && typeof base !== 'string') base = String(base);
 
       // Only create another document if the base is different from current location.
       var doc = document, baseElement;

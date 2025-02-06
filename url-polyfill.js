@@ -162,6 +162,11 @@
       return searchArray.join('&');
     };
 
+    Object.defineProperty(proto, 'size', {
+      get: function () {
+        return this._entries ? Object.keys(this._entries).length : 0;
+      }
+    });
 
     global.URLSearchParams = URLSearchParams;
   };

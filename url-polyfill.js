@@ -244,7 +244,7 @@
           attribute = attributes[i].split('=');
           this.append(
             deserializeParam(attribute[0]),
-            (attribute.length > 1) ? deserializeParam(attribute[1]) : ''
+            (attribute.length > 1) ? deserializeParam(attribute.slice(1).join('=')) : ''
           );
         }
       }
